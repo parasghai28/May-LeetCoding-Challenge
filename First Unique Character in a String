@@ -1,0 +1,65 @@
+#Solution 1
+class Solution {
+    public int firstUniqChar(String s) {
+        int[] count = new int[26];
+        int index;
+        //Creating a frequency array of characters present in string
+        for(int i = 0; i < s.length() ; i++){
+            index = (int)s.charAt(i) - 97;
+            count[index]++;
+        }
+ 
+        // Traversing the String to find first character with frequency 1
+       for(int i = 0; i < s.length(); i++){
+            index = (int)s.charAt(i) - 97;
+            if(count[index] == 1){
+                return i;
+            }
+        }
+        return -1;
+    }
+}
+
+#Solution 2 - Improved and Time Efficient
+#Since Java 5, the data type char does not represent a character/code point,
+but a UTF-16 encoded value which is in reality just a 16-bit unsigned integer in the range 0 to 65535.
+It's just that the initial 128 code points happen to represent the same characters as the corresponding ASCII values.
+Java does perform a conversion of char to int in order to make the indexing possible.
+
+class Solution {
+    public int firstUniqChar(String s) {
+        int[] freq = new int[128];
+        for (char c : s.toCharArray())
+            ++freq[c];
+            
+        
+        for(int i = 0; i < s.length(); i ++)
+            if(freq[s.charAt(i)] == 1)
+                return i;
+        return -1;
+    }
+}
+
+#Solution 3 Using HashMap, Not good with runtime though
+
+class Solution {
+    public int firstUniqChar(String s) {
+         HashMap<Character, Integer> characters = new HashMap<Character, Integer>();
+        for(int i = 0; i < s.length(); i++) {
+            char current = s.charAt(i);
+            if(!characters.containsKey(current)) {
+                characters.put(current, 1);
+            } else {
+                characters.put(current, -1);
+            }
+        }
+        
+        for(int i = 0; i < s.length(); i++) {
+            char current = s.charAt(i);
+            if(characters.get(current) == 1) {
+                return i;
+            }
+        }
+        return -1;
+    }
+}
